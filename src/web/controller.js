@@ -1,5 +1,9 @@
+const path = require('path');
+
 exports.home = (req, res) => {
-    res.send('애플리케이션 소개');
+    //res.send('애플리케이션 소개');
+    res.sendFile(path.join(__dirname, './manager.html'));
+    
 }
 
 exports.page = (req, res) => {

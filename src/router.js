@@ -15,6 +15,7 @@ const chatController = require('./api/chat/controller');
 
 const { logRequestTime } = require('./middleware/log');
 
+router.get('/manager/feed', apiFeedController.indexmager);
 router.post('/file', upload.single('file'), fileController.upload);
 router.get('/file/seq/:id', fileController.getSeqImage);
 router.get('/file/:id', fileController.download);
