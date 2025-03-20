@@ -64,5 +64,5 @@ wss.on('connection', (ws, req) => {
 
 // 서버 시작
 server.listen(port, () => {
-  console.log(`talktome 웹서버 구동 : port = ${port}`);
+  console.log(`talktome server activate : port = ${port}`);
 });
