@@ -25,7 +25,7 @@ exports.enterRoom = async (req, res) => {
     const userId = req.user.id;
     try {
         const roomId = await chatRepository.enterRoom(userId, partnerId);
-        console.log('roomId : ', roomId);
+        //console.log('roomId : ', roomId);
         res.send({result: 'ok', roomId: roomId});
     } catch (error) {
         res.send({result: 'error', data: error.message});
@@ -47,13 +47,13 @@ exports.handleMessage = async (mews, partnerws, user, message) => {
 };
 
 const sendMessageToClient = (mews, partnerws, message) => {
-    console.log('sendMessageToClient : ', message);
+    //console.log('sendMessageToClient : ', message);
     if(mews && mews.readyState === WebSocket.OPEN) {
-        console.log('enter mews && OPEN');
+        //console.log('enter mews && OPEN');
         mews.send(JSON.stringify(message));
     }
     if(partnerws && partnerws.readyState === WebSocket.OPEN) {
-        console.log('enter partnerws && OPEN');
+        //console.log('enter partnerws && OPEN');
         partnerws.send(JSON.stringify(message));
     }
 };

@@ -29,7 +29,7 @@ chatController.setWss(wss);
 const clients = new Map();
 
 wss.on('connection', (ws, req) => {
-  console.log('클라이언트 접속');
+  //console.log('클라이언트 접속');
   const myId = new URL(req.url, 'http://${req.headers.host}').searchParams.get('id');
   if(!myId) {
     ws.close();
@@ -37,15 +37,15 @@ wss.on('connection', (ws, req) => {
   }
   clients.set(myId, ws);
 
-  console.log(`마이 아이디는 무엇 : ${myId}`);
+  //console.log(`마이 아이디는 무엇 : ${myId}`);
 
 
   ws.on('message', (message) => {
     const parsedMessage = JSON.parse(message);
-    console.log(parsedMessage);
+    //console.log(parsedMessage);
     jwt.verify(parsedMessage.token, process.env.JWT_KEY, (err, decoded) => {
       if (err) {
-        console.log('에러 땜시 소캣 종료야');
+        //console.log('에러 땜시 소캣 종료야');
           ws.close();
       } else {
         // decoded : user 정보 
@@ -57,12 +57,12 @@ wss.on('connection', (ws, req) => {
     });
   });
   ws.on('close', () => {
-    console.log('소켓이 종료 하였음...종료 id : ', myId);
+    //console.log('소켓이 종료 하였음...종료 id : ', myId);
     clients.delete(myId);
   });
 });
 
 // 서버 시작
 server.listen(port, () => {
-  console.log(`talktome server activate : port = ${port}`);
+  console.log(`talktome webServer start : port = ${port}`);
 });

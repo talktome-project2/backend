@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-// 문제 없음.
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -14,7 +13,7 @@ function authenticateToken(req, res, next) {
             return res.status(403).send({message: '유효하지 않은 토큰'});
         }
         req.user = decoded;
-        //console.log(decoded);
+        
         next();
     });
 }

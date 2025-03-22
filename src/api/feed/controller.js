@@ -1,14 +1,5 @@
 const repository = require('./repository');
 
-exports.indexmager = async (req, res) => {
-    const {page = 1, size = 20, gender = '전체남여', region = '전체지역', age = '전체나이'} = req.query;
-
-    const items = await repository.index(page, size, gender, region, age);
-
-    res.json({result: 'ok', data: items});
-
-}
-
 exports.index = async (req, res) => {
     const {page = 1, size = 20, gender = '전체남여', region = '전체지역', age = '전체나이'} = req.query;
 

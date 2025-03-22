@@ -12,10 +12,25 @@ const apiUserController = require('./api/user/controller');
 const fileController = require('./api/file/controller');
 const apiFriendController = require('./api/friend/controller');
 const chatController = require('./api/chat/controller');
+const managerController = require('./api/manager/controller');
 
 const { logRequestTime } = require('./middleware/log');
 
-router.get('/manager/feed', apiFeedController.indexmager);
+router.get('/manager/feed', managerController.index);
+router.get('/manager/member/id/:id', managerController.getMemberInfoById);
+router.get('/manager/member/email/:email', managerController.getMemberInfoByEmail);
+router.get('/manager/friend/accept/:id', managerController.getAcceptFriendList); // 본인의 모든 친구 리턴
+router.get('/manager/friend/block/me/:id', managerController.blockMeToOtherIndex); // 내가 차단한 사람
+router.get('/manager/friend/block/other/:id', managerController.blockOtherToMeIndex); // 남이 나를 차단한 사람
+router.get('/manager/count/datefeed', managerController.countDateFeed);
+router.get('/manager/count/ios', managerController.countIOS);
+router.get('/manager/count/android', managerController.countAndroid);
+router.get('/manager/count/man', managerController.countMan);
+router.get('/manager/count/woman', managerController.countWoman);
+router.get('/manager/count/age', managerController.countAge);
+router.get('/manager/count/region', managerController.countRegion);
+router.delete('/manager/member/:id', managerController.deleteMember);
+
 router.post('/file', upload.single('file'), fileController.upload);
 router.get('/file/seq/:id', fileController.getSeqImage);
 router.get('/file/:id', fileController.download);

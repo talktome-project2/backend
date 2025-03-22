@@ -46,8 +46,8 @@ exports.saveMessage = async (roomId, userId, content) => {
 
     const selectQuery = `SELECT * FROM chat WHERE id = ?`;
     const rows = await pool.query(selectQuery, [insertId]);
-    console.log('<<<<<<<<<<<<<>>>>>>>>>>>>>>>>');
-    console.log('rows = ', rows);
+    //console.log('<<<<<<<<<<<<<>>>>>>>>>>>>>>>>');
+    //console.log('rows = ', rows);
     return (rows.length < 0) ? null : rows[0];
 };
 

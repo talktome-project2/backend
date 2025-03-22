@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
         res.send({ result: 'fail', message: '이메일 번호 혹은 비밀번호를 확인해 주세요.'});
     } else {
         item['is_me'] = true;
-        console.log('item : ', item);
+        //console.log('item : ', item);
         const data = await jwt({ id: item.id, email: item.email});
         res.send({ result: 'ok', access_token: data, data: item});
     }

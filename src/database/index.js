@@ -8,7 +8,7 @@ exports.pool = mysql.createPool(
         database: process.env.DB_DATABASE,
         timezone: 'Z',
         waitForConnections: true,
-        connectionLimit: 10,
+        connectionLimit: 20,
         queueLimit: 0
     }
 );
