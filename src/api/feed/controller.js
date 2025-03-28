@@ -25,3 +25,16 @@ exports.message = async (req, res) => {
         res.send({result: 'fail', message: '오류가 발생하였습니다.'});
     }
 }
+
+exports.updatePosition = async (req, res) => {
+    const {latitude, longitude} = req.body;
+    const user = req.user;
+
+    const result = await repository.updatePosition(user.id, latitude, longitude);
+
+    if(result.affectedRows > 0) {
+        res.send({result: 'ok'});
+    } else {
+        res.send({result: 'fail', message: '오류가 발생하였습니다.'});
+    }
+}

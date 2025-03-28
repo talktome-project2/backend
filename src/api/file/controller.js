@@ -2,9 +2,10 @@ const repository = require('./repository');
 
 exports.upload = async (req, res) => {
     const file = req.file;
+    const member_id = req.body.member_id;
 
     const {affectedRows, insertId} = await repository.create(
-        file.originalname, file.path, file.size
+        member_id, file.originalname, file.path, file.size
     );
 
     if(affectedRows > 0) {

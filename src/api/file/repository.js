@@ -1,8 +1,9 @@
 const {pool} = require('../../database');
 
-exports.create = async (name, path, size) => {
-    const query = `INSERT INTO files (original_name, file_path, file_size) VALUES(?,?,?)`;
-    return await pool.query(query, [name, path, size]);
+exports.create = async (member_id, name, path, size) => {
+    console.log('member_id : ', member_id);
+    const query = `INSERT INTO files (member_id, original_name, file_path, file_size) VALUES(?,?,?,?)`;
+    return await pool.query(query, [member_id, name, path, size]);
 }
 
 exports.show = async (id) => {

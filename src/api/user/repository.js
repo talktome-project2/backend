@@ -1,9 +1,9 @@
 const { pool } = require('../../database');
 
-exports.register = async (email, password, age, nickname, gender, profile_id, region, intro, fcm_token, platform) => {
-    const query = `INSERT INTO member (email, password, age, nickname, gender, profile_id, region, intro, fcm_token, platform) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const imageId = profile_id === undefined ? null : profile_id;
-    return await pool.query(query, [email, password, age, nickname, gender, imageId, region, intro, fcm_token, platform]);
+exports.register = async (email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform) => {
+    const query = `INSERT INTO member (email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform, message, profile_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '방금 가입했어요.', 0)`;
+    //const imageId = profile_id === undefined ? null : profile_id;
+    return await pool.query(query, [email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform]);
 }
 
 exports.login = async (email, password) => {

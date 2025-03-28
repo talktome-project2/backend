@@ -3,7 +3,7 @@ const {pool} = require('../../database');
 exports.index = async (page, size, gender, region, age) => {
     const offset = (page - 1)* size;
 
-    let query = `SELECT id, age, nickname, gender, profile_id, region, intro, message, recent_at FROM member`;
+    let query = `SELECT id, age, nickname, gender, profile_id, region, intro, message, latitude, longitude, recent_at FROM member`;
 
     const whereClause = [], params = [];
 
@@ -46,4 +46,9 @@ exports.index = async (page, size, gender, region, age) => {
 exports.message = async (id, message) => {
     const query =  `UPDATE member SET message = ?, recent_at = NOW() WHERE id = ?`;
     return await pool.query(query, [message, id]);
+}
+
+exports.updatePosition = async (id, latitude, longitude) => {
+    const query = `UPDATE member SET latitude = ?, longitude = ? WHERE id = ?`;
+    return await pool.query(query, [latitude, longitude, id]);
 }

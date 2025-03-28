@@ -58,6 +58,7 @@ router.get('/api/member/img', fileController.getMemberProfileImage);
 router.put('/api/fcm', apiUserController.fcmToken);
 
 router.get('/api/feed', apiFeedController.index);
+router.put('/api/user/my/position', apiFeedController.updatePosition);
 router.put('/api/feed/message', apiFeedController.message);
 
 router.get('/api/friend/accept', apiFriendController.getAcceptFriendList); // 본인의 모든 친구 리턴

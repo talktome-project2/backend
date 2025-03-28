@@ -8,7 +8,10 @@ const http = require('http'); // HTTP 서버 모듈 추가
 const WebSocket = require('ws');
 const chatController = require('./src/api/chat/controller')
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
+// 모든 도메인에서의 요청 허용
+app.use(cors());
 // JSON 형식의 데이터 처리
 app.use(bodyParser.json());
 // URL 인코딩된 데이터 처리

@@ -4,7 +4,9 @@ const jwt = require('./jwt');
 
 exports.register = async (req, res) => {
 
-    const { email, password, age, nickname, gender, profile_id, region, intro, fcm_token, platform } = req.body;
+    console.log(req.body);
+
+    const { email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform } = req.body;
 
     let { count } = await repository.findByEmail(email);
 
@@ -14,7 +16,7 @@ exports.register = async (req, res) => {
 
     const result = await crypto.pbkdf2Sync(password, process.env.SALT_KEY, 50, 100, 'sha512');
 
-    const { affectedRows, insertId } = await repository.register(email, result.toString('base64'), age, nickname, gender, profile_id, region, intro, fcm_token, platform);
+    const { affectedRows, insertId } = await repository.register(email, result.toString('base64'), age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform);
     
     if(affectedRows > 0) {
         const data = await jwt({ id: insertId, email: email });
