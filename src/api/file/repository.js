@@ -40,6 +40,6 @@ exports.deleteSeqImage = async (id, seq) => {
 }
 
 exports.deleteProfileImage = async (id) => {
-    const query = `UPDATE member SET profile_id = NULL WHERE id = ?`;
+    const query = `UPDATE member SET profile_id = 0 WHERE id = ?`;
     return await pool.query(query, [id]);
 }

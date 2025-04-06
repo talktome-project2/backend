@@ -48,6 +48,8 @@ router.use(logRequestTime);
 router.post('/auth/register', apiUserController.register);
 router.post('/auth/login', apiUserController.login);
 router.get('/auth/member/:id', apiUserController.getMemberInfo);
+router.get('/auth/check/email/:email', apiUserController.checkEmail);
+router.get('/auth/check/nickname/:nickname', apiUserController.checkNickname);
 
 // 피드 관련 라우트, 모든 요청에 인증 필요
 // 이후 모든 라우트에 인증 적용

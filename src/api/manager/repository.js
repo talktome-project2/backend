@@ -5,7 +5,7 @@ exports.index = async (page, size, gender, region, age, platform, date_select, s
     const offset = (page - 1)* size;
 
     let query = `SELECT m.id, m.email, m.age, m.nickname, m.gender, m.profile_id, m.region, m.intro, m.message, m.platform, m.created_at,
-                (SELECT count(*) FROM friend WHERE (me_id = m.id OR partner_id = m.id) AND permit = true) AS friend_count FROM member AS m`;
+                (SELECT count(*) FROM friend WHERE (me_id = m.id OR partner_id = m.id) AND permit = 1) AS friend_count FROM member AS m`;
 
     const whereClause = [], params = [];
 
@@ -69,9 +69,9 @@ exports.getMemberInfoByEmail = async (email) => {
 
 // userId 의 모든 친구들을 리턴
 exports.getAcceptFriendList = async (userId) => {
-    let query = `SELECT m.id AS member_id, m.email, m.nickname, m.age, m.region, m.profile_id, m.gender FROM member AS m INNER JOIN friend AS f ON m.id = f.partner_id WHERE me_id = ? AND permit = true 
+    let query = `SELECT m.id AS member_id, m.email, m.nickname, m.age, m.region, m.profile_id, m.gender FROM member AS m INNER JOIN friend AS f ON m.id = f.partner_id WHERE me_id = ? AND permit = 1 
                 UNION
-                SELECT m.id AS member_id, m.email, m.nickname, m.age, m.region, m.profile_id, m.gender FROM member AS m INNER JOIN friend AS f ON m.id = f.me_id WHERE partner_id = ? AND permit = true`;
+                SELECT m.id AS member_id, m.email, m.nickname, m.age, m.region, m.profile_id, m.gender FROM member AS m INNER JOIN friend AS f ON m.id = f.me_id WHERE partner_id = ? AND permit = 1`;
     return await pool.query(query, [userId, userId]);
 }
 

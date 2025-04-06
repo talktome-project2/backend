@@ -8,11 +8,11 @@ exports.setWss = (webSocketServer) => {
 }
 
 exports.roomIndex = async (req, res) => {
-    //const { page = 1, size = 20 } = req.query;
+    const { page = 1, size = 20 } = req.query;
     const userId = req.user.id;
 
     try {
-        const roomsData = await chatRepository.getRooms(userId);
+        const roomsData = await chatRepository.getRooms(userId, page, size);
         res.send({result: 'ok', data: roomsData});
     } catch (error) {
         res.send({result: 'error', data: error.message});
@@ -35,10 +35,13 @@ exports.enterRoom = async (req, res) => {
 //index.js 에서 사용하는 웹 소캣 메시지가 수신되었을 때의 처리 함수
 exports.handleMessage = async (mews, partnerws, user, message) => {
     const { roomId, content } = message;
-
+    let read_check = true;
     try {
+        if(partnerws && partnerws.readyState === WebSocket.OPEN) {
+            read_check = true; //1 상대방이 읽었다.
+        } else read_check = false; //0 상대방이 읽지 않았다.
         // 메시지 저장
-        const saveMessage = await chatRepository.saveMessage(roomId, user.id, content);  
+        const saveMessage = await chatRepository.saveMessage(roomId, user.id, content, read_check);  
         // 해당 메시지를 다시 전송
         sendMessageToClient(mews, partnerws, saveMessage);
     } catch (error) {
@@ -47,24 +50,27 @@ exports.handleMessage = async (mews, partnerws, user, message) => {
 };
 
 const sendMessageToClient = (mews, partnerws, message) => {
-    //console.log('sendMessageToClient : ', message);
+    console.log('sendMessageToClient : ', message);
     if(mews && mews.readyState === WebSocket.OPEN) {
-        //console.log('enter mews && OPEN');
+        console.log('enter mews && OPEN');
         mews.send(JSON.stringify(message));
     }
     if(partnerws && partnerws.readyState === WebSocket.OPEN) {
-        //console.log('enter partnerws && OPEN');
+        console.log('enter partnerws && OPEN');
+        console.log('partnerws : ', partnerws);
         partnerws.send(JSON.stringify(message));
     }
 };
 
 // 채팅방에 접속했을 때 미처 수신하지 못한 메시지들을 한 번에 받아올 수 있는 함수
 exports.getMissedMessages = async (req, res) => {
-    const { page =1, size = 20 } = req.query;
+    //const { page =1, size = 20 } = req.query;
     const { id } = req.params;
-
+    const user_id = req.user.id;
+    console.log('========> user_id : ', user_id);
+    console.log('========> room_id : ', id);
     try {
-        const missedMessages = await chatRepository.getMessagesAfter(id, page, size);
+        const missedMessages = await chatRepository.getMessagesAfter(id, user_id);
         res.send({result: 'ok', data: missedMessages});
     } catch (error) {
         res.send({result: 'error', data: error.message});

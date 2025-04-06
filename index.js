@@ -53,6 +53,8 @@ wss.on('connection', (ws, req) => {
       } else {
         // decoded : user 정보 
         const { partnerId } = parsedMessage;
+        console.log('myId : ', myId);
+        console.log('partnerId : ', partnerId);
         const wsPartner = clients.get(partnerId);
 
         chatController.handleMessage(ws, wsPartner, decoded, parsedMessage);
@@ -60,8 +62,9 @@ wss.on('connection', (ws, req) => {
     });
   });
   ws.on('close', () => {
-    //console.log('소켓이 종료 하였음...종료 id : ', myId);
+    console.log('소켓이 종료 하였음...종료 id : ', myId);
     clients.delete(myId);
+    console.log('id clients : ', clients.get(myId));
   });
 });
 

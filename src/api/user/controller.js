@@ -4,8 +4,6 @@ const jwt = require('./jwt');
 
 exports.register = async (req, res) => {
 
-    console.log(req.body);
-
     const { email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform } = req.body;
 
     let { count } = await repository.findByEmail(email);
@@ -24,6 +22,30 @@ exports.register = async (req, res) => {
     } else {
         res.send({ result: 'fail', message: '알 수 없는 오류' });
     }
+}
+
+exports.checkEmail = async (req, res) => {
+    const { email } = req.params;
+
+    let { count } = await repository.findByEmail(email);
+
+    if(count > 0) {
+        return res.send({ result: 'fail', message: '중복된 이메일이 존재합니다.' });
+    }
+
+    res.send({ result: 'ok', message: '사용 가능한 이메일입니다.' });
+}
+
+exports.checkNickname = async (req, res) => {
+    const { nickname } = req.params;
+
+    let { count } = await repository.findByNickname(nickname);
+
+    if(count > 0) {
+        return res.send({ result: 'fail', message: '중복된 닉네임이 존재합니다.' });
+    }
+
+    res.send({ result: 'ok', message: '사용 가능한 닉네임입니다.' });
 }
 
 exports.login = async (req, res) => {

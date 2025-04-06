@@ -11,22 +11,32 @@ exports.getMemberInfo = async (req, res) => {
 // 본인의 모든 친구들을 리턴
 exports.getAcceptFriendList = async (req, res) => {
     const userId = req.user.id;
-    const items = await repository.getAcceptMeFriendList(userId);
-    const items2 = await repository.getAcceptOtherFriendList(userId);
-    const merge = items.concat(items2);
-    res.json({result: 'ok', data: merge});
+    const {page = 1, size = 20} = req.query;
+    //const items = await repository.getAcceptMeFriendList(userId);
+    //const items2 = await repository.getAcceptOtherFriendList(userId);
+    //const merge = items.concat(items2);
+    const items = await repository.getAcceptFriendList(userId, page, size);
+
+    const mItems = items.map(item => ({...item, is_me: (userId == item.id)}));
+
+    res.json({result: 'ok', data: items});
 }
 
 exports.getSendFriendList = async (req, res) => {
     const userId = req.user.id;
-    const items = await repository.getSendFriendList(userId);
-    res.json({result: 'ok', data: items});
+    const {page = 1, size = 20} = req.query;
+    const items = await repository.getSendFriendList(userId, page, size);
+    console.log('getSendFriendList items : ', items);
+    const mItems = items.map(item => ({...item, is_me: (userId == item.id)}));
+    res.json({result: 'ok', data: mItems});
 }
 
 exports.getReceiveFriendList = async (req, res) => {
     const userId = req.user.id;
-    const items = await repository.getReceiveFriendList(userId);
-    res.json({result: 'ok', data: items});
+    const {page = 1, size = 20} = req.query;
+    const items = await repository.getReceiveFriendList(userId, page, size);
+    const mItems = items.map(item => ({...item, is_me: (userId == item.id)}));
+    res.json({result: 'ok', data: mItems});
 }
 
 // 특정 사람과 친구사이인가

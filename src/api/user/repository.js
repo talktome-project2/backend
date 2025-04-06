@@ -17,6 +17,11 @@ exports.findByEmail = async (email) => {
     return (result.length < 0) ? null : result[0];
 }
 
+exports.findByNickname = async (nickname) => {
+    const result = await pool.query(`SELECT count(*) count FROM member WHERE nickname = ?`, [nickname]);
+    return (result.length < 0) ? null : result[0];
+}
+
 exports.fcmToken = async (userId, fcmToken) => {
     const query = `UPDATE member SET fcm_token = ? WHERE id = ?`;
     let result = await pool.query(query, [fcmToken, userId]);

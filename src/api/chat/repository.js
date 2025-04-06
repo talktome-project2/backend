@@ -1,10 +1,10 @@
 const {pool} = require('../../database');
 
-exports.getRooms = async (userId) => {
-    //const offset = (page - 1) * size;
+exports.getRooms = async (userId, page, size) => {
+    const offset = (page - 1) * size;
 
     const query = `
-        SELECT r.room_id, r.me_id, r.partner_id, m.nickname, m.profile_id, m.gender, latest_chat.content, latest_chat.created_at
+        SELECT r.room_id, r.me_id, r.partner_id, m.nickname, m.profile_id, m.gender, m.age, m.region, latest_chat.content, latest_chat.read_check, latest_chat.user_id, latest_chat.created_at
         FROM room AS r
         INNER JOIN member AS m ON m.id = 
             CASE
@@ -12,7 +12,7 @@ exports.getRooms = async (userId) => {
                 ELSE r.me_id
             END
         LEFT OUTER JOIN (
-			SELECT chat1.room_id, chat1.content, chat1.created_at, chat1.user_id
+			SELECT chat1.room_id, chat1.content, chat1.created_at, chat1.user_id, chat1.read_check
             FROM chat AS chat1
             INNER JOIN (
 				SELECT room_id, MAX(created_at) AS latest
@@ -21,10 +21,10 @@ exports.getRooms = async (userId) => {
 			) AS chat2 ON chat1.room_id = chat2.room_id AND chat1.created_at = chat2.latest
 		) AS latest_chat ON r.room_id = latest_chat.room_id
         WHERE r.me_id = ? OR r.partner_id = ?
-        ORDER BY latest_chat.created_at DESC;
+        ORDER BY latest_chat.created_at DESC LIMIT ? OFFSET ?;
         `;
 
-    return await pool.query(query, [userId, userId, userId]);
+    return await pool.query(query, [userId, userId, userId, `${size}`, `${offset}`]);
 };
 
 exports.enterRoom = async (userId, partnerId) => {
@@ -40,9 +40,9 @@ exports.enterRoom = async (userId, partnerId) => {
     }
 };
 
-exports.saveMessage = async (roomId, userId, content) => {
-    const insertQuery = `INSERT INTO chat (room_id, user_id, content) VALUES (?, ?, ?)`;
-    const { insertId } = await pool.query(insertQuery, [roomId, userId, content]);
+exports.saveMessage = async (roomId, userId, content, read_check) => {
+    const insertQuery = `INSERT INTO chat (room_id, user_id, read_check, content) VALUES (?, ?, ?, ?)`;
+    const { insertId } = await pool.query(insertQuery, [roomId, userId, read_check, content]);
 
     const selectQuery = `SELECT * FROM chat WHERE id = ?`;
     const rows = await pool.query(selectQuery, [insertId]);
@@ -51,10 +51,14 @@ exports.saveMessage = async (roomId, userId, content) => {
     return (rows.length < 0) ? null : rows[0];
 };
 
-exports.getMessagesAfter = async (roomId, page, size) => {
-    const offset = (page - 1) * size;
+exports.getMessagesAfter = async (roomId, userId) => {
+    //const offset = (page - 1) * size;
 
-    const query = `SELECT * FROM chat WHERE room_id = ? ORDER BY created_at ASC LIMIT ? OFFSET ?`;
+    const query_switch = `UPDATE chat SET read_check = 1 WHERE room_id = ? AND user_id != ?`;
+    await pool.query(query_switch, [roomId, userId]);
 
-    return await pool.query(query, [`${roomId}`, `${size}`, `${offset}`]);
+    const query = `SELECT * FROM chat WHERE room_id = ? ORDER BY created_at ASC`;
+    const result = await pool.query(query, [roomId]);
+    console.log('result : ', result);
+    return result;//await pool.query(query, [roomId]);
 };
