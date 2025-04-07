@@ -53,3 +53,13 @@ exports.deleteSingleImage = async (imgId) => {
     const query = `DELETE FROM files WHERE id = ?`;
     return await pool.query(query, [imgId]);
 }
+
+exports.getMemberProfileImageId = async (userId) => {
+    const query = `SELECT profile_id FROM member WHERE id = ?`;
+    return await pool.query(query, [userId])
+}
+
+exports.getMemberSeqImageId = async (userId, seq) => {
+    const query = `SELECT image_id FROM image WHERE member_id = ? AND seq = ?`;
+    return await pool.query(query, [userId, seq]);
+}

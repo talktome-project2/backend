@@ -124,3 +124,20 @@ exports.deleteSingleImage = async (req, res) => {
         return res.status(404).send({result: 'fail', message: '파일을 찾을 수 없습니다.'});
     }
 }
+
+exports.getMemberProfileImageId = async (req, res) => {
+    const userId = req.params.id;
+
+    const result = await repository.getMemberProfileImageId(userId);
+    if(result.length > 0) res.send({result: 'ok', data: result});
+    else res.send({result: 'fail'});
+}
+
+exports.getMemberSeqImageId = async (req, res) => {
+    const userId = req.params.id;
+    const seq = req.query.seq;
+
+    const result = await repository.getMemberSeqImageId(userId, seq);
+    if(result.length > 0) res.send({result: 'ok', data: result});
+    else res.send({result: 'fail'});
+}

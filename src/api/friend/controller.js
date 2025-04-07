@@ -16,10 +16,11 @@ exports.getAcceptFriendList = async (req, res) => {
     //const items2 = await repository.getAcceptOtherFriendList(userId);
     //const merge = items.concat(items2);
     const items = await repository.getAcceptFriendList(userId, page, size);
+    console.log('getAcceptFriendList items : ', items);
 
     const mItems = items.map(item => ({...item, is_me: (userId == item.id)}));
 
-    console.log('getAcceptFriendList items : ', mItems);
+
 
     res.json({result: 'ok', data: items});
 }

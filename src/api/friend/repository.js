@@ -8,6 +8,10 @@ exports.getMemberInfo = async (memberId) => {
 
 exports.getAcceptFriendList = async (userId, page, size) => {
     const offset = (page - 1)* size;
+    console.log('userId : ', userId);
+    console.log('page : ', page);
+    console.log('size : ', size);
+    console.log('offset : ', offset);
     let query =
     `SELECT * FROM (SELECT m.id, m.nickname, m.age, m.region, m.profile_id, m.gender, m.intro, m.message, m.latitude, m.longitude, m.recent_at, f.created_at FROM member AS m INNER JOIN friend AS f ON m.id = f.partner_id WHERE me_id = ? AND permit = 1
     UNION
