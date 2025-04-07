@@ -19,7 +19,7 @@ exports.getAcceptFriendList = async (req, res) => {
 
     const mItems = items.map(item => ({...item, is_me: (userId == item.id)}));
 
-    console.log('getAcceptFriendList items : ', mitems);
+    console.log('getAcceptFriendList items : ', mItems);
 
     res.json({result: 'ok', data: items});
 }
