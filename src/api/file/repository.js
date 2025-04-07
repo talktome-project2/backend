@@ -43,3 +43,13 @@ exports.deleteProfileImage = async (id) => {
     const query = `UPDATE member SET profile_id = 0 WHERE id = ?`;
     return await pool.query(query, [id]);
 }
+
+exports.getImagePath = async (imgId) => {
+    const query = `SELECT file_path FROM files WHERE id = ?`;
+    return await pool.query(query, [imgId]);
+}
+
+exports.deleteSingleImage = async (imgId) => {
+    const query = `DELETE FROM files WHERE id = ?`;
+    return await pool.query(query, [imgId]);
+}

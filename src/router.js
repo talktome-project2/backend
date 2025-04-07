@@ -38,6 +38,11 @@ router.post('/file/:id', fileController.update);
 router.put('/file/profile/:id', fileController.updateProfileImageId);
 router.delete('/file/profile/:id', fileController.deleteProfileImage);
 router.delete('/file/seq/:id', fileController.deleteSeqImage);
+// router.delete('/file/single/profile/:id', fileController.deleteSingleProfileImage);
+// router.delete('/file/single/seq/:id', fileController.deleteSingleSeqImage);
+// router.delete('/file/multiple/seq/:id', fileController.deleteMultipleSeqImage);
+// router.delete('/file/all/:id', fileController.deleteAllImage);
+router.delete('/file/image/:imgId', fileController.deleteSingleImage);
 
 router.get('/', webController.home);
 // 특정 라우트에 대해 로그 미들웨어 적용

@@ -1,4 +1,5 @@
 const repository = require('./repository');
+const fs = require('fs');
 
 exports.upload = async (req, res) => {
     const file = req.file;
@@ -91,4 +92,35 @@ exports.deleteProfileImage = async (req, res) => {
     const result = await repository.deleteProfileImage(memberId);
 
     if(result.affectedRows > 0) return res.send({result: 'ok'})
+}
+
+// router.delete('/file/single/profile/:id', fileController.deleteSingleProfileImage);
+// router.delete('/file/single/seq/:id', fileController.deleteSingleSeqImage);
+// router.delete('/file/multiple/seq/:id', fileController.deleteMultipleSeqImage);
+// router.delete('/file/all/:id', fileController.deleteAllImage);
+
+//router.delete('/file/image/:imgId', fileController.deleteSingleImage);
+
+exports.deleteSingleImage = async (req, res) => {
+    const imgId = req.params.imgId;
+
+    const result = await repository.getImagePath(imgId);
+
+    if(result.length > 0) {
+        const filePath = result[0].file_path;
+        fs.unlink(filePath, (err) => {
+            if(err) {
+                console.error('Error deleting file:', err);
+                return res.status(500).send({result: 'fail', message: '파일 삭제 중 오류 발생'});
+            }
+        });
+
+        const result2 = await repository.deleteSingleImage(imgId);
+        if(result2.affectedRows > 0) {
+            return res.status(200).send({result: 'ok'});
+        }
+        return res.status(404).send({result: 'fail', message: '파일 삭제 중 오류 발생'});
+    }else{
+        return res.status(404).send({result: 'fail', message: '파일을 찾을 수 없습니다.'});
+    }
 }
