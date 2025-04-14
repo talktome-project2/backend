@@ -40,15 +40,14 @@ exports.enterRoom = async (userId, partnerId) => {
     }
 };
 
-exports.saveMessage = async (roomId, userId, content, read_check) => {
+exports.saveMessage = async (roomId, userId, read_check, content) => {
     const insertQuery = `INSERT INTO chat (room_id, user_id, read_check, content) VALUES (?, ?, ?, ?)`;
     const { insertId } = await pool.query(insertQuery, [roomId, userId, read_check, content]);
 
     const selectQuery = `SELECT * FROM chat WHERE id = ?`;
     const rows = await pool.query(selectQuery, [insertId]);
-    //console.log('<<<<<<<<<<<<<>>>>>>>>>>>>>>>>');
-    //console.log('rows = ', rows);
-    return (rows.length < 0) ? null : rows[0];
+
+    return (rows.length < 0)? null : rows[0];
 };
 
 exports.getMessagesAfter = async (roomId, userId) => {
@@ -62,3 +61,10 @@ exports.getMessagesAfter = async (roomId, userId) => {
     console.log('result : ', result);
     return result;//await pool.query(query, [roomId]);
 };
+
+exports.getRecipientId = async (roomId, senderId) => {
+    const query = `SELECT IF(me_id = ?, partner_id, me_id) AS user_id FROM room WHERE room_id = ?`;
+    const result = await pool.query(query, [senderId, roomId]);
+    console.log('chat repository getRecipientId result = ', result[0]['user_id']);
+    return result[0]['user_id'];
+}

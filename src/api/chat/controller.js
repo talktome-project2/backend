@@ -1,11 +1,6 @@
 const WebSocket = require('ws');
 const chatRepository = require('./repository');
 const { json } = require('body-parser');
-let wss;
-
-exports.setWss = (webSocketServer) => {
-    wss = webSocketServer;
-}
 
 exports.roomIndex = async (req, res) => {
     const { page = 1, size = 20 } = req.query;
@@ -32,43 +27,12 @@ exports.enterRoom = async (req, res) => {
     }
 };
 
-//index.js 에서 사용하는 웹 소캣 메시지가 수신되었을 때의 처리 함수
-exports.handleMessage = async (mews, partnerws, user, message) => {
-    const { roomId, content } = message;
-    let read_check = true;
-    try {
-        if(partnerws && partnerws.readyState === WebSocket.OPEN) {
-            read_check = true; //1 상대방이 읽었다.
-        } else read_check = false; //0 상대방이 읽지 않았다.
-        // 메시지 저장
-        const saveMessage = await chatRepository.saveMessage(roomId, user.id, content, read_check);  
-        // 해당 메시지를 다시 전송
-        sendMessageToClient(mews, partnerws, saveMessage);
-    } catch (error) {
-        console.error('Error handling message : ', error);
-    }
-};
-
-const sendMessageToClient = (mews, partnerws, message) => {
-    console.log('sendMessageToClient : ', message);
-    if(mews && mews.readyState === WebSocket.OPEN) {
-        console.log('enter mews && OPEN');
-        mews.send(JSON.stringify(message));
-    }
-    if(partnerws && partnerws.readyState === WebSocket.OPEN) {
-        console.log('enter partnerws && OPEN');
-        console.log('partnerws : ', partnerws);
-        partnerws.send(JSON.stringify(message));
-    }
-};
-
 // 채팅방에 접속했을 때 미처 수신하지 못한 메시지들을 한 번에 받아올 수 있는 함수
 exports.getMissedMessages = async (req, res) => {
     //const { page =1, size = 20 } = req.query;
     const { id } = req.params;
     const user_id = req.user.id;
-    console.log('========> user_id : ', user_id);
-    console.log('========> room_id : ', id);
+
     try {
         const missedMessages = await chatRepository.getMessagesAfter(id, user_id);
         res.send({result: 'ok', data: missedMessages});
@@ -76,3 +40,13 @@ exports.getMissedMessages = async (req, res) => {
         res.send({result: 'error', data: error.message});
     }
 };
+
+exports.getRecipientId = async (roomId, senderId) => {
+    const user_id = await chatRepository.getRecipientId(roomId, senderId);
+    console.log('user_id => ', user_id);
+    return user_id;
+}
+
+exports.saveMessage = async (roomId, userId, read_check, content) => {
+    return await chatRepository.saveMessage(roomId, userId, read_check, content);
+}
