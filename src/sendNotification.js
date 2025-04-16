@@ -25,9 +25,9 @@ exports.sendPushNotification = async (token, title, body, data = {}) => {
 
   try {
     const response = await messaging.send(message);
-    //console.log("✅ 푸시 알림 성공:", response);
+    console.log("✅ 푸시 알림 성공:", response);
   } catch (error) {
-    //console.error("❌ 푸시 알림 실패:", error);
+    console.error("❌ 푸시 알림 실패:", error);
   }
 };
 
