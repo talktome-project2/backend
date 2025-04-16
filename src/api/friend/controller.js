@@ -84,6 +84,15 @@ exports.isDenyFriend = async (req, res) => {
 exports.delete = async (req, res) => {
     const userId = req.user.id;
     const partnerId = req.params.id;
+
+    // 채팅룸이 있는지 확인
+    const roomId = await repository.getRoomId(userId, partnerId);
+    if(roomId != null) {
+        // chat 없애기
+        const result0 = await repository.deleteChatByOneRoom(roomId);
+        // room 없애기
+        const result1 = await repository.deleteRoom(userId, partnerId);
+    }
     const result = await repository.delete(userId, partnerId);
     if(result.affectedRows > 0) {
         res.json({result: 'ok', data: result});
@@ -96,9 +105,20 @@ exports.blockFriend = async (req, res) => {
     const userId = req.user.id;
     const partnerId = req.body.partnerId;
 
-    const result = await repository.blockFriend(userId, partnerId);
+    // 채팅룸이 있는지 확인
+    const roomId = await repository.getRoomId(userId, partnerId);
+    if(roomId != null) {
+        // chat 없애기
+        const result0 = await repository.deleteChatByOneRoom(roomId);
+        // room 없애기
+        const result1 = await repository.deleteRoom(userId, partnerId);
+    }
+    // friend 없애기
+    const result2 = await repository.deleteFriend(userId, partnerId);
+    // block 하기
+    const result3 = await repository.blockFriend(userId, partnerId);
 
-    if(result.affectedRows > 0) {
+    if(result3.affectedRows > 0) {
         res.json({result: 'ok', data: result});
     } else {
         res.json({result: 'fail', data: result});
@@ -144,6 +164,15 @@ exports.sendMessageFriend = async (req, res) => {
         res.json({result: 'ok', data: result});
     } else {
         res.json({result: 'fail', data: result});
+    }
+}
+
+exports.sendFcmChatMessage = async (partnerId, message) => {
+    const fcm_token = await repository.getFcmToken(partnerId);
+    if(fcm_token.length > 0) {
+        const token = fcm_token[0].fcm_token;
+        console.log('sendFcmChatMessage token : ', token);
+        send.sendPushNotification(token, '채팅요청', message, {type: 'friend'});
     }
 }
 

@@ -53,7 +53,7 @@ exports.saveMessage = async (roomId, userId, read_check, content) => {
 exports.getMessagesAfter = async (roomId, userId) => {
     //const offset = (page - 1) * size;
 
-    const query_switch = `UPDATE chat SET read_check = 1 WHERE room_id = ? AND user_id != ?`;
+    const query_switch = `UPDATE chat SET read_check = 1 WHERE room_id = ? AND user_id != ? AND read_check = 0`;
     await pool.query(query_switch, [roomId, userId]);
 
     const query = `SELECT * FROM chat WHERE room_id = ? ORDER BY created_at ASC`;

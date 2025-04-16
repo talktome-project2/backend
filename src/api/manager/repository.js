@@ -142,6 +142,16 @@ exports.deleteBlock = async (userId) => {
     return await pool.query(query, [userId, userId]);
 }
 
+exports.getherRoomIdsAndDeleteChatDB = async (userId) => {
+    const query = `SELECT DISTINCT room_id FROM chat WHERE user_id = ?`
+    const result = await pool.query(query, [userId]);
+    const roomIds = result.map(row => row.room_id);
+    for(let i = 0; i < roomIds.length; i++) {
+        const query = `DELETE FROM chat WHERE room_id = ?`;
+        await pool.query(query, [roomIds[i]]);
+    }
+}
+
 exports.deleteChat = async (userId) => {
     const query = `DELETE FROM chat WHERE user_id = ?`;
     return await pool.query(query, [userId]);

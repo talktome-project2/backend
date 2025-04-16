@@ -96,7 +96,7 @@ exports.deleteMember = async (req, res) => {
     const userId = req.params.id;
     const result = await repository.deleteMember(userId);
     const result2 = await repository.deleteBlock(userId);
-    const result3 = await repository.deleteChat(userId);
+    const result3 = await repository.getherRoomIdsAndDeleteChatDB(userId);
     const result5 = await repository.deleteFriend(userId);
     const result6 = await repository.deleteImage(userId);
     const result7 = await repository.deleteRoom(userId);

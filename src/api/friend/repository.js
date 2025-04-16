@@ -104,3 +104,24 @@ exports.denySuggestion = async (userId, partnerId) => {
     let query = `UPDATE friend SET permit = 0 WHERE me_id = ? AND partner_id = ?`;
     return await pool.query(query, [partnerId, userId]);
 }
+
+exports.getRoomId = async (userId, partnerId) => {
+    let query = `SELECT room_id FROM room WHERE (me_id = ? AND partner_id = ?) OR (me_id = ? AND partner_id = ?)`;
+    const result = await pool.query(query, [userId, partnerId, partnerId, userId]);
+    return result.length > 0 ? result[0].room_id : null;
+}
+
+exports.deleteChatByOneRoom = async (roomId) => {
+    let query = `DELETE FROM chat WHERE room_id = ?`;
+    return await pool.query(query, [roomId]);
+}
+
+exports.deleteRoom = async (userId, partnerId) => {
+    let query = `DELETE FROM room WHERE (me_id = ? AND partner_id = ?) OR (me_id = ? AND partner_id = ?)`;
+    return await pool.query(query, [userId, partnerId, partnerId, userId]);
+}
+
+exports.deleteFriend = async (userId, partnerId) => {
+    let query = `DELETE FROM friend WHERE (me_id = ? AND partner_id = ?) OR (me_id = ? AND partner_id = ?)`;
+    return await pool.query(query, [userId, partnerId, partnerId, userId]);
+}

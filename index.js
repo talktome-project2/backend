@@ -8,6 +8,7 @@ const http = require('http'); // HTTP 서버 모듈 추가
 const cors = require('cors');
 const { Server } = require("socket.io"); // socket.io 임포트
 const chatController = require('./src/api/chat/controller');
+const friendController = require('./src/api/friend/controller');
 
 // 사용자 ID와 소켓 ID 매핑 (인증 없이는 신뢰도 낮음)
 let userSockets = {};
@@ -135,6 +136,7 @@ io.on('connection', (socket) => {
         console.log(`[Socket 전송] ${roomId} 방으로 메시지 전송됨.`);
         // 오프라인: DB 저장 (클라이언트가 보낸 senderId 사용)
         console.log(`[DB 저장] 상대방(${recipientId}) 부재중 또는 매핑 없음. 메시지를 DB에 저장합니다.`);
+        friendController.sendFcmChatMessage(recipientId, message);
         
         // TODO: 발신자에게 저장 알림
       }
