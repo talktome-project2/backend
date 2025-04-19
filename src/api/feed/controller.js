@@ -38,3 +38,12 @@ exports.updatePosition = async (req, res) => {
         res.send({result: 'fail', message: '오류가 발생하였습니다.'});
     }
 }
+
+exports.getNotice = async (req, res) => {
+    const items = await repository.getNotice();
+    if(items.length > 0) {
+        res.json({result: 'ok', data: items});
+    } else {
+        res.json({result: 'fail'});
+    }
+}

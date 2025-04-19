@@ -2,7 +2,7 @@ const { pool } = require('../../database');
 const { message } = require('../feed/repository');
 
 exports.getMemberInfo = async (memberId) => {
-    let query = `SELECT id, age, nickname, gender, profile_id, region, intro, message, recent_at FROM member WHERE id = ? LIMIT 1`;
+    let query = `SELECT * FROM member WHERE id = ? LIMIT 1`;
     return await pool.query(query, [memberId]);
 }
 
@@ -91,7 +91,7 @@ exports.sendMessageFriend = async (userId, partnerId, message) => {
 }
 
 exports.getFcmToken = async (partnerId) => {
-    let query = `SELECT fcm_token FROM member WHERE id = ?`;
+    let query = `SELECT fcm_token, nickname, receive_fcm FROM member WHERE id = ?`;
     return await pool.query(query, [partnerId]);
 }
 
@@ -124,4 +124,10 @@ exports.deleteRoom = async (userId, partnerId) => {
 exports.deleteFriend = async (userId, partnerId) => {
     let query = `DELETE FROM friend WHERE (me_id = ? AND partner_id = ?) OR (me_id = ? AND partner_id = ?)`;
     return await pool.query(query, [userId, partnerId, partnerId, userId]);
+}
+
+exports.getNickname = async (userId) => {
+    let query = `SELECT nickname FROM member WHERE id = ?`;
+    const result = await pool.query(query, [userId]);
+    return result.length > 0 ? result[0].nickname : null;
 }

@@ -1,7 +1,7 @@
 const { pool } = require('../../database');
 
 exports.register = async (email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform) => {
-    const query = `INSERT INTO member (email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform, message, profile_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '방금 가입했어요.', 0)`;
+    const query = `INSERT INTO member (email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform, message, profile_id, receive_fcm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '방금 가입했어요.', 0, 1)`;
     //const imageId = profile_id === undefined ? null : profile_id;
     return await pool.query(query, [email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform]);
 }
@@ -56,5 +56,11 @@ exports.changeIntro = async (userId, intro) => {
     const query = `UPDATE member SET intro = ? WHERE id = ?`;
     let result =
         await pool.query(query, [intro, userId]);
+    return result;
+}
+
+exports.toggleFcm = async (userId, receive_fcm) => {
+    const query = `UPDATE member SET receive_fcm = ? WHERE id = ?`;
+    let result = await pool.query(query, [receive_fcm, userId]);
     return result;
 }

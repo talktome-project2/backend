@@ -57,6 +57,7 @@ router.post('/auth/login', apiUserController.login);
 router.get('/auth/member/:id', apiUserController.getMemberInfo);
 router.get('/auth/check/email/:email', apiUserController.checkEmail);
 router.get('/auth/check/nickname/:nickname', apiUserController.checkNickname);
+router.put('/auth/toggle/fcm/:id', apiUserController.toggleFcm);
 
 // 피드 관련 라우트, 모든 요청에 인증 필요
 // 이후 모든 라우트에 인증 적용
@@ -65,7 +66,7 @@ router.use(authenticateToken);
 router.get('/api/member/img', fileController.getMemberProfileImage);
 
 router.put('/api/fcm', apiUserController.fcmToken);
-
+router.get('/api/notice', apiFeedController.getNotice);
 router.get('/api/feed', apiFeedController.index);
 router.put('/api/user/my/position', apiFeedController.updatePosition);
 router.put('/api/feed/message', apiFeedController.message);

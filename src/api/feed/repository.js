@@ -52,3 +52,8 @@ exports.updatePosition = async (id, latitude, longitude) => {
     const query = `UPDATE member SET latitude = ?, longitude = ? WHERE id = ?`;
     return await pool.query(query, [latitude, longitude, id]);
 }
+
+exports.getNotice = async () => {
+    const query = `SELECT * FROM notice WHERE open = 1 ORDER BY created_at DESC LIMIT 1`;
+    return await pool.query(query);
+}

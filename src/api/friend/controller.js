@@ -116,9 +116,9 @@ exports.blockFriend = async (req, res) => {
     // friend 없애기
     const result2 = await repository.deleteFriend(userId, partnerId);
     // block 하기
-    const result3 = await repository.blockFriend(userId, partnerId);
+    const result = await repository.blockFriend(userId, partnerId);
 
-    if(result3.affectedRows > 0) {
+    if(result.affectedRows > 0) {
         res.json({result: 'ok', data: result});
     } else {
         res.json({result: 'fail', data: result});
@@ -156,24 +156,41 @@ exports.sendMessageFriend = async (req, res) => {
     const result = await repository.sendMessageFriend(userId, partnerId, message);
 
     if(result.affectedRows > 0) {
-        const fcm_token = await repository.getFcmToken(partnerId);
-        if(fcm_token.length > 0) {
-            const token = fcm_token[0].fcm_token;
-            send.sendPushNotification(token, '친구신청', message, {type: 'friend'});
+        const result1 = await repository.getFcmToken(partnerId);
+        //const nickname = await repository.getNickname(partnerId);
+        if(result1.length > 0) {
+            const token = result1[0].fcm_token;
+            const nickname = result1[0].nickname;
+            const receive_fcm = result1[0].receive_fcm;
+            if(receive_fcm == 1) {
+                send.sendPushNotification(token, `${nickname}님의 친구신청`, message, {type: 'friend'});
+            }
+
+            res.json({result: 'ok', data: result1});
+        } else {
+            res.json({result: 'fail', message: '상대방의 fcm_token을 찾을 수 없습니다.'});
         }
-        res.json({result: 'ok', data: result});
+        
     } else {
         res.json({result: 'fail', data: result});
     }
 }
 
 exports.sendFcmChatMessage = async (partnerId, message) => {
-    const fcm_token = await repository.getFcmToken(partnerId);
-    if(fcm_token.length > 0) {
-        const token = fcm_token[0].fcm_token;
-        console.log('sendFcmChatMessage token : ', token);
-        send.sendPushNotification(token, '채팅요청', message, {type: 'friend'});
+    const result = await repository.getFcmToken(partnerId);
+    //const nickname = await repository.getNickname(partnerId);
+    if(result.length > 0) {
+        const token = result[0].fcm_token;
+        const nickname = result[0].nickname;
+        const receive_fcm = result[0].receive_fcm;
+        if(receive_fcm == 1) {
+            send.sendPushNotification(token, `${nickname}님의 채팅요청`, message, {type: 'friend'});
+        }
+        res.json({result: 'ok', data: result});
+    }else{
+        res.json({result: 'fail', message: '상대방의 fcm_token을 찾을 수 없습니다.'});
     }
+       
 }
 
 exports.agreeSuggestion = async (req, res) => {
