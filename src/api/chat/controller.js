@@ -43,7 +43,7 @@ exports.getMissedMessages = async (req, res) => {
 
 exports.getRecipientId = async (roomId, senderId) => {
     const user_id = await chatRepository.getRecipientId(roomId, senderId);
-    console.log('user_id => ', user_id);
+    //console.log('user_id => ', user_id);
     return user_id;
 }
 

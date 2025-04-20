@@ -110,7 +110,7 @@ exports.deleteSingleImage = async (req, res) => {
         const filePath = result[0].file_path;
         fs.unlink(filePath, (err) => {
             if(err) {
-                console.error('Error deleting file:', err);
+                //console.error('Error deleting file:', err);
                 return res.status(500).send({result: 'fail', message: '파일 삭제 중 오류 발생'});
             }
         });

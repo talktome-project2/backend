@@ -58,13 +58,13 @@ exports.getMessagesAfter = async (roomId, userId) => {
 
     const query = `SELECT * FROM chat WHERE room_id = ? ORDER BY created_at ASC`;
     const result = await pool.query(query, [roomId]);
-    console.log('result : ', result);
+    //console.log('result : ', result);
     return result;//await pool.query(query, [roomId]);
 };
 
 exports.getRecipientId = async (roomId, senderId) => {
     const query = `SELECT IF(me_id = ?, partner_id, me_id) AS user_id FROM room WHERE room_id = ?`;
     const result = await pool.query(query, [senderId, roomId]);
-    console.log('chat repository getRecipientId result = ', result[0]['user_id']);
+    //console.log('chat repository getRecipientId result = ', result[0]['user_id']);
     return result[0]['user_id'];
 }

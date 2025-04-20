@@ -145,9 +145,6 @@ exports.toggleFcm = async (req, res) => {
     const userId = req.params.id;
     const { receive_fcm } = req.body;
 
-    console.log('>>>>>>>>>>>>>>> userId : ', userId);
-    console.log('>>>>>>>>>>>>>>> receive_fcm : ', receive_fcm);
-
     const result = await repository.toggleFcm(userId, receive_fcm);
 
     if(result.affectedRows > 0) {
