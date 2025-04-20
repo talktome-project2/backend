@@ -186,9 +186,9 @@ exports.sendFcmChatMessage = async (partnerId, message) => {
         if(receive_fcm == 1) {
             send.sendPushNotification(token, `${nickname}님의 채팅요청`, message, {type: 'friend'});
         }
-        res.json({result: 'ok', data: result});
+        return true;
     }else{
-        res.json({result: 'fail', message: '상대방의 fcm_token을 찾을 수 없습니다.'});
+        return false;
     }
        
 }
