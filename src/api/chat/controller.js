@@ -50,3 +50,15 @@ exports.getRecipientId = async (roomId, senderId) => {
 exports.saveMessage = async (roomId, userId, read_check, content) => {
     return await chatRepository.saveMessage(roomId, userId, read_check, content);
 }
+
+exports.deleteRoom = async (req, res) => {
+    const { roomId } = req.params;
+
+    try {
+        const result0 = await chatRepository.deleteChat(roomId);
+        const result1 = await chatRepository.deleteRoom(roomId);
+        res.send({result: 'ok', data: result1});
+    } catch (error) {
+        res.send({result: 'error', data: error.message});
+    }
+}

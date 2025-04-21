@@ -68,3 +68,19 @@ exports.getRecipientId = async (roomId, senderId) => {
     //console.log('chat repository getRecipientId result = ', result[0]['user_id']);
     return result[0]['user_id'];
 }
+
+exports.deleteRoom = async (roomId, userId) => {
+    const deleteQuery = `DELETE FROM room WHERE room_id = ?`;
+    const result = await pool.query(deleteQuery, [roomId]);
+
+    if (result.affectedRows > 0) {
+        return { success: true };
+    } else {
+        return { success: false, message: 'Failed to delete room' };
+    }
+}
+
+exports.deleteChat = async (roomId) => {
+    const deleteQuery = `DELETE FROM chat WHERE room_id = ?`;
+    return await pool.query(deleteQuery, [roomId]);
+}

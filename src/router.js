@@ -94,6 +94,7 @@ router.put('/api/user/my/intro', apiUserController.changeIntro);
 router.get('/api/chat/room', chatController.roomIndex);
 router.get('/api/chat/room/:id', chatController.getMissedMessages);
 router.post('/api/chat/room', chatController.enterRoom);
+router.delete('/api/chat/room/:id', chatController.deleteRoom);
 
 
 module.exports = router;

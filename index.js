@@ -179,6 +179,6 @@ io.on('connection', (socket) => {
 
 // 서버 시작
 server.listen(port, () => {
-  console.log(`talktome 웹 서버 시작: 포트 = ${port}`);
-  console.log(`Socket.IO 서버 실행 중 (인증 없음)`); // 로그 메시지 변경
+  console.log(`talktome Web Server Start : port = ${port}`);
+  console.log(`Socket.IO Server Running (no auth)`); // 로그 메시지 변경
 });
