@@ -75,8 +75,10 @@ exports.deleteRoom = async (roomId) => {
 
     if (result.affectedRows > 0) {
         return { success: true };
+        //console.log('Room deleted successfully');
     } else {
         return { success: false, message: 'Failed to delete room' };
+        //console.log('Failed to delete room');
     }
 }
 
