@@ -69,7 +69,7 @@ exports.getRecipientId = async (roomId, senderId) => {
     return result[0]['user_id'];
 }
 
-exports.deleteRoom = async (roomId, userId) => {
+exports.deleteRoom = async (roomId) => {
     const deleteQuery = `DELETE FROM room WHERE room_id = ?`;
     const result = await pool.query(deleteQuery, [roomId]);
 
