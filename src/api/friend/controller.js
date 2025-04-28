@@ -162,7 +162,7 @@ exports.sendMessageFriend = async (req, res) => {
             const token = result1[0].fcm_token;
             const nickname = result1[0].nickname;
             const receive_fcm = result1[0].receive_fcm;
-            if(receive_fcm == 1) {
+            if(receive_fcm == 1 && token != null) {
                 send.sendPushNotification(token, `${nickname}님의 친구신청`, message, {type: 'friend'});
             }
 
@@ -183,7 +183,7 @@ exports.sendFcmChatMessage = async (partnerId, message) => {
         const token = result[0].fcm_token;
         const nickname = result[0].nickname;
         const receive_fcm = result[0].receive_fcm;
-        if(receive_fcm == 1) {
+        if(receive_fcm == 1 && token != null) {
             send.sendPushNotification(token, `${nickname}님의 채팅요청`, message, {type: 'friend'});
         }
         return true;
@@ -217,4 +217,31 @@ exports.denySuggestion = async (req, res) => {
     } else {
         res.json({result: 'fail', data: result});
     }
+}
+
+exports.notifyMember = async (req, res) => {
+    const userId = req.user.id;
+    const partnerId = req.body.partnerId;
+    const reason = req.body.reason;
+
+    //const device_id = await repository.getDeviceId(partnerId);
+
+    const result = await repository.notifyMember(userId, partnerId, reason);
+
+    if(result.affectedRows > 0) {
+        res.json({result: 'ok', data: result});
+    } else {
+        res.json({result: 'fail', data: result});
+    }
+
+    // if(device_id != null) {
+    //     const result = await repository.notifyMember(userId, partnerId, device_id, reason);
+    //     if(result.affectedRows > 0) {
+    //         res.json({result: 'ok', data: result});
+    //     } else {
+    //         res.json({result: 'fail', data: result});
+    //     }
+    // }else {
+    //     res.json({result: 'fail', message: '상대방의 device_id를 찾을 수 없습니다.'});
+    // }
 }

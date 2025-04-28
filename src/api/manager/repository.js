@@ -185,3 +185,12 @@ exports.deleteFiles = async (userId) => {
     const query2 = `DELETE FROM files WHERE member_id = ?`;
     return await pool.query(query2, [userId]);
 }
+
+exports.applyNotify = async (partnerId) => {
+    
+    const query2 = `UPDATE member SET is_blocked = 1 WHERE id = ?`;
+    let result = await pool.query(query2, [partnerId]);
+
+    const query = `UPDATE blocked_devices SET apply = 1 WHERE member_id = ?`;
+    return await pool.query(query, [partnerId]);
+}

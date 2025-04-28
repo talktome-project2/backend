@@ -131,3 +131,14 @@ exports.getNickname = async (userId) => {
     const result = await pool.query(query, [userId]);
     return result.length > 0 ? result[0].nickname : null;
 }
+
+exports.notifyMember = async (userId, partnerId, reason) => {
+    let query = `INSERT INTO blocked_devices(request_id, member_id, reason, apply) VALUES (?, ?, ?, 0)`;
+    return await pool.query(query, [userId, partnerId, reason]);
+}
+
+exports.getDeviceId = async (partnerId) => {
+    let query = `SELECT device_id FROM member WHERE id = ?`;
+    const result = await pool.query(query, [partnerId]);
+    return result.length > 0 ? result[0].device_id : null;
+}

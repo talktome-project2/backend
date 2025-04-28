@@ -4,9 +4,9 @@ const jwt = require('./jwt');
 
 exports.register = async (req, res) => {
 
-    const { email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform } = req.body;
+    const { email, password, age, nickname, gender, region, intro, fcm_token, latitude, longitude, platform} = req.body;
 
-    let { count } = await repository.findByEmail(email);
+    let count = await repository.findByEmail(email);
 
     if(count > 0) {
         return res.send({ result: 'fail', message: '중복된 이메일이 존재합니다.' });
@@ -60,6 +60,19 @@ exports.login = async (req, res) => {
         //console.log('item : ', item);
         const data = await jwt({ id: item.id, email: item.email});
         res.send({ result: 'ok', access_token: data, data: item});
+    }
+}
+
+exports.resetDeviceId = async (req, res) => {
+    const userId = req.user.id;
+    const { device_id } = req.body;
+
+    const result = await repository.resetDeviceId(userId, device_id);
+
+    if(result.affectedRows > 0) {
+        res.json({result: 'ok', data: result});
+    } else {
+        res.json({result: 'fail', data: result});
     }
 }
 
@@ -151,5 +164,41 @@ exports.toggleFcm = async (req, res) => {
         res.json({result: 'ok', data: result});
     } else {
         res.json({result: 'fail', data: result});
+    }
+}
+
+exports.checkDeviceId = async (req, res) => {
+    const { deviceId } = req.params;
+
+    const result = await repository.checkDeviceId(deviceId);
+
+    if(result.length > 0) {
+        res.json({result: 'ok', data: result[0]});
+    } else {
+        res.json({result: 'fail', data: '해당 디바이스가 존재하지 않습니다.'});
+    }
+}
+
+exports.checkSelfDelete = async (req, res) => {
+    const userId = req.user.id;
+
+    const result = await repository.checkSelfDelete(userId);
+
+    if(result.length > 0) {
+        res.json({result: 'ok', data: result[0]});
+    } else {
+        res.json({result: 'fail', data: '해당 유저가 존재하지 않습니다.'});
+    }
+}
+
+exports.checkSelfDelete = async (req, res) => {
+    const userId = req.user.id;
+
+    const result = await repository.checkSelfDelete(userId);
+
+    if(result.length > 0) {
+        res.json({result: 'ok', data: result[0]});
+    } else {
+        res.json({result: 'fail', data: '신고된 사람이 아닙니다.'});
     }
 }

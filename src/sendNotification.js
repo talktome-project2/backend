@@ -25,7 +25,7 @@ exports.sendPushNotification = async (token, title, body, data = {}) => {
 
   try {
     const response = await messaging.send(message);
-    console.log(" >>> success push notification :", response);
+    //console.log(" >>> success push notification :", response);
   } catch (error) {
     console.error(" >>> fail push notification :", error);
   }

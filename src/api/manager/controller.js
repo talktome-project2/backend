@@ -108,3 +108,14 @@ exports.deleteMember = async (req, res) => {
         res.json({result: 'fail', data: result});
     }
 }
+
+exports.applyNotify = async (req, res) => {
+    const partnerId = req.params.id;
+    const result = await repository.applyNotify(partnerId);
+    const result2 = await repository.deleteBlock(partnerId);
+    const result3 = await repository.getherRoomIdsAndDeleteChatDB(partnerId);
+    const result5 = await repository.deleteFriend(partnerId);
+    const result6 = await repository.deleteImage(partnerId);
+    const result7 = await repository.deleteRoom(partnerId);
+    const result4 = await repository.deleteFiles(partnerId);
+}

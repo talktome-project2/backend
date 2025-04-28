@@ -144,7 +144,7 @@ io.on('connection', (socket) => {
 
     } catch (error) {
       //console.error(`[메시지 처리 오류] ${roomId}:`, error);
-      socket.emit('error_message', '메시지 처리 중 서버 오류 발생');
+      socket.emit('error_message', '상대방이 채팅방에서 퇴장했습니다.');
     }
   });
 

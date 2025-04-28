@@ -29,6 +29,7 @@ router.get('/manager/count/man', managerController.countMan);
 router.get('/manager/count/woman', managerController.countWoman);
 router.get('/manager/count/age', managerController.countAge);
 router.get('/manager/count/region', managerController.countRegion);
+router.delete('/manager/apply/notify/:id', managerController.applyNotify);
 router.delete('/manager/member/:id', managerController.deleteMember);
 
 router.post('/file', upload.single('file'), fileController.upload);
@@ -57,6 +58,8 @@ router.post('/auth/login', apiUserController.login);
 router.get('/auth/member/:id', apiUserController.getMemberInfo);
 router.get('/auth/check/email/:email', apiUserController.checkEmail);
 router.get('/auth/check/nickname/:nickname', apiUserController.checkNickname);
+//router.get('/auth/check/device/:deviceId', apiUserController.checkDeviceId);
+//router.get('/auth/check/self_delete/:id', apiUserController.checkSelfDelete)
 router.put('/auth/toggle/fcm/:id', apiUserController.toggleFcm);
 
 // 피드 관련 라우트, 모든 요청에 인증 필요
@@ -70,6 +73,7 @@ router.get('/api/notice', apiFeedController.getNotice);
 router.get('/api/feed', apiFeedController.index);
 router.put('/api/user/my/position', apiFeedController.updatePosition);
 router.put('/api/feed/message', apiFeedController.message);
+router.put('/api/device_id', apiUserController.resetDeviceId);
 
 router.get('/api/friend/accept', apiFriendController.getAcceptFriendList); // 본인의 모든 친구 리턴
 router.get('/api/friend/block', apiFriendController.blockIndex); // 내가 그리고 남이 나를 차단한 사람
@@ -81,11 +85,13 @@ router.get('/api/friend/:id', apiFriendController.isFriend); // 특정 사람과
 router.get('/api/friend/:id/pending', apiFriendController.isPendingFriend); //특정 사람과 친구 신청중인가
 router.get('/api/friend/:id/deny', apiFriendController.isDenyFriend); // 특정 사람과 친구거절인가
 router.delete('/api/friend/:id', apiFriendController.delete); // 특정 사람과 친구 해제
+router.post('/api/friend/notify', apiFriendController.notifyMember);
 router.post('/api/friend/block', apiFriendController.blockFriend); // 특정 사람 차단
 router.post('/api/friend/message', apiFriendController.sendMessageFriend); // 친구신청 메시지 보내기
 router.put('/api/friend/:id/agree', apiFriendController.agreeSuggestion);
 router.put('/api/friend/:id/deny', apiFriendController.denySuggestion);
 
+router.get('/api/check/self_delete', apiUserController.checkSelfDelete);
 router.put('/api/user/my/nickname', apiUserController.changeNickname);
 router.put('/api/user/my/region', apiUserController.changeRegion);
 router.put('/api/user/my/age', apiUserController.changeAge);
