@@ -7,7 +7,7 @@ const privateKey = process.env.JWT_KEY;
 
 // payload 를 받아 토큰을 생성하는 함수
 async function generateToken(payload) {
-    return await signAsync(payload, privateKey, { expiresIn: '500h' });
+    return await signAsync(payload, privateKey, { expiresIn: '100y' });
 }
 
 module.exports = generateToken;
