@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const multer = require('multer');  // file download를 위한 미들웨어
 const upload = multer({ dest: 'storage/' });
@@ -16,6 +17,20 @@ const managerController = require('./api/manager/controller');
 
 const { logRequestTime } = require('./middleware/log');
 
+//router.get('/app-ads.txt', managerController.appAdsTxt);
+
+router.get('/app-ads.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, './app-ads.txt'));
+});
+
+router.get('/manager/notify/index', managerController.notifyIndex);
+router.get('/manager/notify/detail/:id', managerController.notifyDetail);
+router.get('/manager/notice/detail/:id', managerController.noticeDetail);
+router.get('/manager/notice/index', managerController.noticeIndex);
+router.get('/manager/notice/count', managerController.countNotice);
+router.put('/manager/notice/update/:id', managerController.updateNotice);
+router.put('/manager/notice/toggle/open/:id', managerController.toggleNotice);
+router.post('/manager/notice/create', managerController.createNotice);
 router.get('/manager/feed', managerController.index);
 router.get('/manager/member/id/:id', managerController.getMemberInfoById);
 router.get('/manager/member/email/:email', managerController.getMemberInfoByEmail);
@@ -23,6 +38,7 @@ router.get('/manager/friend/accept/:id', managerController.getAcceptFriendList);
 router.get('/manager/friend/block/me/:id', managerController.blockMeToOtherIndex); // 내가 차단한 사람
 router.get('/manager/friend/block/other/:id', managerController.blockOtherToMeIndex); // 남이 나를 차단한 사람
 router.get('/manager/count/datefeed', managerController.countDateFeed);
+router.get('/manager/count/notify', managerController.countNotify);
 router.get('/manager/count/ios', managerController.countIOS);
 router.get('/manager/count/android', managerController.countAndroid);
 router.get('/manager/count/man', managerController.countMan);
@@ -48,7 +64,7 @@ router.get('/file/member/:id/profile', fileController.getMemberProfileImageId);
 router.get('/file/member/:id/seq', fileController.getMemberSeqImageId);
 
 router.get('/', webController.home);
-// 특정 라우트에 대해 로그 미들웨어 적용
+//특정 라우트에 대해 로그 미들웨어 적용
 router.get('/page/:route', logRequestTime, webController.page);
 // 전역적으로 로그 미들웨어 적용
 router.use(logRequestTime);

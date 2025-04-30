@@ -1,4 +1,5 @@
 const repository = require('./repository');
+const path = require('path');
 
 exports.index = async (req, res) => {
     const {page = 1, size = 20, gender = '전체남여', region = '전체지역', age = '전체나이', platform = '전체', date_select = '전체날짜', start_date, end_date} = req.query;
@@ -118,4 +119,57 @@ exports.applyNotify = async (req, res) => {
     const result6 = await repository.deleteImage(partnerId);
     const result7 = await repository.deleteRoom(partnerId);
     const result4 = await repository.deleteFiles(partnerId);
+}
+
+exports.notifyIndex = async (req, res) => {
+    const {page = 1, size = 20} = req.query;
+    const items = await repository.notifyIndex(page, size);
+    res.json({result: 'ok', data: items});
+}
+
+exports.countNotify = async (req, res) => {
+    const items = await repository.countNotify();
+    res.json({result: 'ok', data: items});
+}
+
+exports.notifyDetail = async (req, res) => {
+    const block_id = req.params.id;
+    const items = await repository.notifyDetail(block_id);
+    res.json({result: 'ok', data: items});
+}
+
+exports.noticeIndex = async (req, res) => {
+    const {page = 1, size = 20} = req.query;
+    const items = await repository.noticeIndex(page, size);
+    res.json({result: 'ok', data: items});
+}
+
+exports.countNotice = async (req, res) => {
+    const items = await repository.countNotice();
+    res.json({result: 'ok', data: items});
+}
+
+exports.toggleNotice = async (req, res) => {
+    const noticeId = req.params.id;
+    const result = await repository.toggleNotice(noticeId);
+    res.json({result: 'ok', data: result});
+}
+
+exports.createNotice = async (req, res) => {
+    const {title, content, open} = req.body;
+    const result = await repository.createNotice(title, content, open);
+    res.json({result: 'ok', data: result});
+}
+
+exports.noticeDetail = async (req, res) => {
+    const noticeId = req.params.id;
+    const result = await repository.noticeDetail(noticeId);
+    res.json({result: 'ok', data: result});
+}
+
+exports.updateNotice = async (req, res) => {
+    const noticeId = req.params.id;
+    const {title, content, open} = req.body;
+    const result = await repository.updateNotice(noticeId, title, content, open);
+    res.json({result: 'ok', data: result});
 }

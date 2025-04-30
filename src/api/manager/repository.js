@@ -194,3 +194,50 @@ exports.applyNotify = async (partnerId) => {
     const query = `UPDATE blocked_devices SET apply = 1 WHERE member_id = ?`;
     return await pool.query(query, [partnerId]);
 }
+
+exports.notifyIndex = async (page, size) => {
+    const offset = (page - 1) * size;
+    const query = `SELECT * FROM blocked_devices ORDER BY blocked_at DESC LIMIT ? OFFSET ?`;
+    return await pool.query(query, [`${size}`, `${offset}`]);
+}
+
+exports.countNotify = async () => {
+    const query = `SELECT count(*) FROM blocked_devices`;
+    return await pool.query(query);
+}
+
+exports.notifyDetail = async (block_id) => {
+    const query = `SELECT * FROM blocked_devices WHERE id = ?`;
+    return await pool.query(query, [block_id]);
+}
+
+exports.noticeIndex = async (page, size) => {
+    const offset = (page - 1) * size;
+    const query = `SELECT * FROM notice ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+    return await pool.query(query, [`${size}`, `${offset}`]);
+}
+
+exports.countNotice = async () => {
+    const query = `SELECT count(*) FROM notice`;
+    return await pool.query(query);
+}
+
+exports.toggleNotice = async (noticeId) => {
+    const query = `UPDATE notice SET open = NOT open WHERE id = ?`;
+    return await pool.query(query, [noticeId]);
+}
+
+exports.createNotice = async (title, content, open) => {
+    const query = `INSERT INTO notice (title, content, open) VALUES (?, ?, ?)`;
+    return await pool.query(query, [title, content, open]);
+}
+
+exports.noticeDetail = async (noticeId) => {
+    const query = `SELECT * FROM notice WHERE id = ?`;
+    return await pool.query(query, [noticeId]);
+}
+
+exports.updateNotice = async (noticeId, title, content, open) => {
+    const query = `UPDATE notice SET title = ?, content = ?, open = ? WHERE id = ?`;
+    return await pool.query(query, [title, content, open, noticeId]);
+}

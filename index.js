@@ -19,6 +19,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
