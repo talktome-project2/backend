@@ -6,7 +6,7 @@ exports.pool = mysql.createPool(
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        timezone: 'Z',
+        timezone: '+09:00',
         waitForConnections: true,
         connectionLimit: 20,
         queueLimit: 0
