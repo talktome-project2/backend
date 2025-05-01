@@ -176,12 +176,12 @@ exports.sendMessageFriend = async (req, res) => {
     }
 }
 
-exports.sendFcmChatMessage = async (partnerId, message) => {
+exports.sendFcmChatMessage = async (partnerId, senderId, message) => {
     const result = await repository.getFcmToken(partnerId);
-    //const nickname = await repository.getNickname(partnerId);
+    const nickname = await repository.getNickname(senderId);
     if(result.length > 0) {
         const token = result[0].fcm_token;
-        const nickname = result[0].nickname;
+        //const nickname = result[0].nickname;
         const receive_fcm = result[0].receive_fcm;
         if(receive_fcm == 1 && token != null) {
             send.sendPushNotification(token, `${nickname}님의 채팅요청`, message, {type: 'friend'});

@@ -137,7 +137,7 @@ io.on('connection', (socket) => {
         //console.log(`[Socket 전송] ${roomId} 방으로 메시지 전송됨.`);
         // 오프라인: DB 저장 (클라이언트가 보낸 senderId 사용)
         //console.log(`[DB 저장] 상대방(${recipientId}) 부재중 또는 매핑 없음. 메시지를 DB에 저장합니다.`);
-        friendController.sendFcmChatMessage(recipientId, message);
+        friendController.sendFcmChatMessage(recipientId, senderId, message);
         
         // TODO: 발신자에게 저장 알림
       }
