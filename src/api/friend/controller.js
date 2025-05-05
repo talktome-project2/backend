@@ -157,10 +157,10 @@ exports.sendMessageFriend = async (req, res) => {
 
     if(result.affectedRows > 0) {
         const result1 = await repository.getFcmToken(partnerId);
-        //const nickname = await repository.getNickname(partnerId);
+        const nickname = await repository.getNickname(userId);
         if(result1.length > 0) {
             const token = result1[0].fcm_token;
-            const nickname = result1[0].nickname;
+            //const nickname = result1[0].nickname;
             const receive_fcm = result1[0].receive_fcm;
             if(receive_fcm == 1 && token != null) {
                 send.sendPushNotification(token, `${nickname}님의 친구신청`, message, {type: 'friend'});
