@@ -9,9 +9,14 @@ exports.pool = mysql.createPool(
         timezone: '+09:00',
         waitForConnections: true,
         connectionLimit: 20,
-        queueLimit: 0
+        queueLimit: 0,
+        dateStrings: true,
     }
 );
+
+exports.pool.on('connection', connection => {
+    connection.query("SET time_zone='+9:00';");
+});
 
 exports.pool.query = async (queryString, params) => {
     const [results] = await this.pool.execute(queryString, params);
