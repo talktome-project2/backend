@@ -119,6 +119,11 @@ exports.applyNotify = async (req, res) => {
     const result6 = await repository.deleteImage(partnerId);
     const result7 = await repository.deleteRoom(partnerId);
     const result4 = await repository.deleteFiles(partnerId);
+    if(result.affectedRows > 0) {
+        res.json({result: 'ok', data: result});
+    } else {
+        res.json({result: 'fail', data: result});
+    }
 }
 
 exports.notifyIndex = async (req, res) => {
