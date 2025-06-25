@@ -37,6 +37,7 @@ router.get('/manager/member/email/:email', managerController.getMemberInfoByEmai
 router.get('/manager/friend/accept/:id', managerController.getAcceptFriendList); // 본인의 모든 친구 리턴
 router.get('/manager/friend/block/me/:id', managerController.blockMeToOtherIndex); // 내가 차단한 사람
 router.get('/manager/friend/block/other/:id', managerController.blockOtherToMeIndex); // 남이 나를 차단한 사람
+router.get('/manager/count/member', managerController.getCountTotalMember); 
 router.get('/manager/count/datefeed', managerController.countDateFeed);
 router.get('/manager/count/notify', managerController.countNotify);
 router.get('/manager/count/ios', managerController.countIOS);

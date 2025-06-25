@@ -178,3 +178,8 @@ exports.updateNotice = async (req, res) => {
     const result = await repository.updateNotice(noticeId, title, content, open);
     res.json({result: 'ok', data: result});
 }
+
+exports.getCountTotalMember = async (req, res) => {
+    const items = await repository.getCountTotalMember();
+    res.json({result: 'ok', data: items});
+}

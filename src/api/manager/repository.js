@@ -241,3 +241,8 @@ exports.updateNotice = async (noticeId, title, content, open) => {
     const query = `UPDATE notice SET title = ?, content = ?, open = ? WHERE id = ?`;
     return await pool.query(query, [title, content, open, noticeId]);
 }
+
+exports.getCountTotalMember = async () => {
+    const query = `SELECT count(*) AS total FROM member`;
+    return await pool.query(query);
+}
